@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mostafa Assad | AI & Machine Learning</title>
+
+  <style>
+    :root{
+      --bg:#06070b;
+      --panel: rgba(255,255,255,.045);
+      --panel2: rgba(255,255,255,.03);
+      --text:#e9eef8;
+      --muted:rgba(233,238,248,.68);
+
+      --blue:#4aa3ff;
+      --cyan:#2dd4ff;
+      --purple:#9b5cff;
+      --pink:#ff4fd8;
+      --line: rgba(255,255,255,.08);
+
+      --radius:18px;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background: radial-gradient(1000px 700px at 85% 20%, rgba(74,163,255,.12), transparent 60%),
+                  radial-gradient(900px 650px at 70% 70%, rgba(155,92,255,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* Top nav */
+    header{
+      position:fixed;
+      inset:0 0 auto 0;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+      backdrop-filter: blur(6px);
+    }
+    .nav-wrap{
+      width:min(1100px, 92vw);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:0 8px;
+    }
+    .brand{
+      font-weight:800;
+      letter-spacing:.4px;
+      color:rgba(233,238,248,.9);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+    .brand .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: linear-gradient(135deg,var(--blue),var(--purple));
+      box-shadow: 0 0 0 6px rgba(74,163,255,.12);
+    }
+
+    nav ul{
+      list-style:none;
+      margin:0;padding:0;display:flex;gap:18px;align-items:center;
+    }
+    nav a{
+      text-decoration:none;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.2px;
+      padding:10px 6px;
+      border-bottom:2px solid transparent;
+      transition:.2s ease;
+    }
+    nav a:hover{
+      color:var(--text);
+      border-bottom-color: rgba(74,163,255,.85);
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:650;
+      font-size:13px;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(74,163,255,.35); }
+    .btn-primary{
+      border-color: rgba(74,163,255,.6);
+      background: linear-gradient(135deg, rgba(74,163,255,.18), rgba(155,92,255,.12));
+    }
+
+    /* Layout */
+    main{
+      width:min(1100px, 92vw);
+      margin:0 auto;
+      padding-top:110px;
+      padding-bottom:80px;
+    }
+    .section{
+      min-height: calc(100vh - 140px);
+      padding:56px 0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:22px;
+      scroll-margin-top:90px;
+    }
+
+    .kicker{
+      color: rgba(74,163,255,.95);
+      font-weight:800;
+      letter-spacing:.12em;
+      font-size:12px;
+      text-transform:uppercase;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:22px;
+      align-items:center;
+      position:relative;
+    }
+    @media (max-width: 920px){
+      .hero{ grid-template-columns:1fr; }
+      nav ul{ display:none; } /* keep simple on mobile */
+    }
+
+    h1,h2{ margin:0; }
+    .hero h1{
+      font-size: clamp(44px, 5vw, 68px);
+      line-height:1.02;
+      letter-spacing:-.02em;
+    }
+    .hero-sub{
+      max-width: 520px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.7;
+      margin-top:10px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      margin-top:22px;
+      flex-wrap:wrap;
+    }
+
+    /* Background illustration (simple radial) */
+    .orb{
+      width:100%;
+      aspect-ratio: 1 / 1;
+      border-radius:50%;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-left:auto;
+      background: radial-gradient(circle at 40% 35%, rgba(74,163,255,.22), transparent 55%),
+                  radial-gradient(circle at 60% 60%, rgba(155,92,255,.18), transparent 55%),
+                  rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      opacity:.95;
+    }
+    .orb:before{
+      content:"";
+      position:absolute; inset:-20%;
+      background: conic-gradient(from 210deg, rgba(74,163,255,.25), rgba(155,92,255,.22), rgba(45,212,255,.18), rgba(74,163,255,.25));
+      filter: blur(26px);
+      opacity:.35;
+      animation: spin 10s linear infinite;
+    }
+    @keyframes spin { to{ transform: rotate(360deg); } }
+    .orb .ring{
+      position:absolute; inset:12%;
+      border-radius:50%;
+      border:1px dashed rgba(255,255,255,.18);
+      opacity:.35;
+    }
+    .orb .core{
+      position:absolute; width:36%; height:36%;
+      border-radius:50%;
+      background: radial-gradient(circle at 35% 30%, rgba(74,163,255,.35), rgba(155,92,255,.14));
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    /* Panels */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    @media (max-width: 900px){
+      .grid-2{ grid-template-columns:1fr; }
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 40px rgba(0,0,0,.25);
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(8px);
+    }
+    .panel:after{
+      content:"";
+      position:absolute; inset:auto -40% -60% -40%;
+      height:160px;
+      background: radial-gradient(circle at 50% 0%, rgba(74,163,255,.18), transparent 60%);
+      opacity:.7;
+    }
+
+    .panel-title{
+      font-weight:850;
+      margin-bottom:10px;
+      letter-spacing:.2px;
+    }
+    .panel p{
+      color:var(--muted);
+      line-height:1.7;
+      margin:0;
+      font-size:14px;
+    }
+
+    /* Colored top lines like your design */
+    .accent-line{
+      height:4px;
+      border-radius:999px;
+      margin-bottom:18px;
+      width:100%;
+      background: linear-gradient(90deg, rgba(74,163,255,1), rgba(155,92,255,1));
+      opacity:.95;
+    }
+    .accent-blue{ background: linear-gradient(90deg, rgba(74,163,255,1), rgba(45,212,255,1)); }
+    .accent-purple{ background: linear-gradient(90deg, rgba(155,92,255,1), rgba(255,79,216,1)); }
+
+    /* Lists / cards */
+    .taglist{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:14px;
+    }
+    .tag{
+      padding:10px 12px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:999px;
+      color: rgba(233,238,248,.78);
+      font-size:13px;
+      font-weight:650;
+    }
+
+    /* Education timeline */
+    .timeline{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .t-item{
+      display:grid;
+      grid-template-columns: 18px 1fr;
+      gap:14px;
+      align-items:start;
+      position:relative;
+      padding:4px 0;
+    }
+    .t-dot{
+      width:12px;height:12px;border-radius:50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      margin-top:6px;
+      box-shadow: 0 0 0 6px rgba(74,163,255,.12);
+    }
+    .t-content{
+      background: rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      padding:14px 16px;
+    }
+    .t-title{ font-weight:850; }
+    .t-sub{ color:var(--muted); font-size:14px; margin-top:6px; line-height:1.6; }
+
+    /* Mission cards */
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid-3{ grid-template-columns:1fr; }
+    }
+    .mini-card{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding:18px;
+    }
+    .mini-card h3{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .mini-card .line{
+      height:3px; border-radius:999px; margin-bottom:12px;
+      background: rgba(74,163,255,.85);
+    }
+    .mini-card .line.cyan{ background: rgba(45,212,255,.9); }
+    .mini-card .line.purple{ background: rgba(155,92,255,.95); }
+
+    /* Projects */
+    .project-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:10px;
+    }
+    .project{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding:16px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .project:before{
+      content:"";
+      position:absolute; left:0; top:0; height:4px; width:100%;
+      background: linear-gradient(90deg, rgba(74,163,255,1), rgba(155,92,255,1));
+      opacity:.95;
+    }
+    .project.alt:before{
+      background: linear-gradient(90deg, rgba(45,212,255,1), rgba(74,163,255,1));
+    }
+    .project.purple:before{
+      background: linear-gradient(90deg, rgba(155,92,255,1), rgba(255,79,216,1));
+    }
+    .project h3{ margin:8px 0 6px; font-size:16px; letter-spacing:.2px; }
+    .project p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; }
+
+
+    /* Eye button + project modal */
+    .proj-head{ display:flex; align-items:center; gap:10px; }
+    .proj-head h3{ margin:8px 0 6px; }
+    .eye-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:34px; height:34px; margin-top:2px;
+      border-radius:10px; cursor:pointer;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+      transition:.2s ease;
+    }
+    .eye-btn:hover{ color:var(--cyan); border-color:rgba(45,212,255,.6); transform:translateY(-1px); }
+
+    .modal{
+      position:fixed; inset:0; z-index:100;
+      display:none; align-items:center; justify-content:center;
+      padding:20px;
+      background:rgba(3,4,8,.72);
+      backdrop-filter: blur(6px);
+    }
+    .modal.open{ display:flex; }
+    .modal-box{
+      width:min(560px, 100%);
+      max-height:85vh; overflow:auto;
+      background: linear-gradient(180deg, #11131c, #0b0d14);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:24px;
+      position:relative;
+    }
+    .modal-box:before{
+      content:""; position:absolute; left:0; top:0; width:100%; height:4px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      border-radius:var(--radius) var(--radius) 0 0;
+    }
+    .modal-close{
+      position:absolute; right:14px; top:16px;
+      width:32px; height:32px; border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:var(--text); font-size:18px; line-height:1; cursor:pointer;
+    }
+    .modal-close:hover{ border-color:rgba(74,163,255,.6); }
+    .modal-box h3{ margin:6px 40px 10px 0; font-size:20px; }
+    .modal-box p{ color:var(--muted); line-height:1.7; font-size:14px; margin:0 0 12px; }
+    .modal-box ul{ margin:0 0 14px; padding-left:18px; color:var(--muted); font-size:14px; line-height:1.8; }
+
+    /* GitHub icon box */
+    .gh-box{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;
+      margin-top:12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      transition:.2s ease;
+    }
+    .gh-box:hover{
+      transform:translateY(-2px);
+      border-color:rgba(74,163,255,.6);
+      color:var(--blue);
+    }
+
+    /* Skills */
+    .skills-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 920px){ .skills-grid{ grid-template-columns:1fr; } }
+    .skill{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      min-height:92px;
+    }
+    .skill:before{
+      content:"";
+      position:absolute; left:18px; top:0;
+      height:4px; width:calc(100% - 36px);
+      border-radius:999px;
+      background: rgba(74,163,255,.9);
+    }
+    .skill.blue:before{ background: rgba(74,163,255,.95); }
+    .skill.cyan:before{ background: rgba(45,212,255,.95); }
+    .skill.purple:before{ background: rgba(155,92,255,.95); }
+    .skill h3{ margin:16px 0 6px; font-size:16px; }
+    .skill p{ margin:0; color:var(--muted); font-size:14px; }
+
+    /* Footer contact box */
+    .contact-box{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .contact-box:before{
+      content:"";
+      position:absolute; left:18px; top:0;
+      height:4px; width:calc(100% - 36px);
+      background: linear-gradient(90deg, rgba(45,212,255,.95), rgba(74,163,255,.95));
+      border-radius:999px;
+    }
+    .contact-grid{
+      display:grid; grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 900px){ .contact-grid{ grid-template-columns:1fr; } }
+    .kv{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .kv label{
+      color:rgba(233,238,248,.55);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .kv span{
+      color: rgba(233,238,248,.9);
+      font-weight:700;
+      font-size:14px;
+    }
+    .closing{
+      margin-top:10px;
+      color: rgba(45,212,255,.9);
+      font-weight:800;
+    }
+
+    /* smooth scroll fallback */
+    html{ scroll-behavior:smooth; }
+
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+      <span class="dot"></span>
+      <span>MOSTAFA ASSAD</span>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="#projects">VIEW PROJECTS</a>
+      <a class="btn" href="#contact">CONTACT ME</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- PAGE 1 -->
+  <section class="section hero" id="home">
+    <div>
+      <div class="kicker">HELLO, I'M</div>
+      <h1>MOSTAFA ASSAD</h1>
+      <div class="kicker" style="margin-top:12px; color:rgba(155,92,255,.95); letter-spacing:.08em;">
+        AI & MACHINE LEARNING
+      </div>
+      <div class="hero-sub">
+        Computer Science student focused on AI & ML.
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">VIEW PROJECTS</a>
+        <a class="btn" href="#contact">CONTACT ME</a>
+      </div>
+    </div>
+
+    <div class="orb" aria-hidden="true">
+      <div class="ring"></div>
+      <div class="core"></div>
+    </div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="section" id="introduction">
+    <div class="grid-2">
+      <div class="panel">
+        <div class="accent-line accent-blue"></div>
+        <div class="panel-title">INTRODUCTION</div>
+        <p style="margin-bottom:12px;">
+          Hello, Welcome
+        </p>
+        <p>
+          A concise introduction to my AI & Machine Learning journey.
+        </p>
+      </div>
+
+      <div class="panel" style="background: linear-gradient(180deg, rgba(155,92,255,.07), rgba(255,255,255,.03));">
+        <div class="accent-line" style="background: linear-gradient(90deg, rgba(155,92,255,1), rgba(45,212,255,1));"></div>
+        <div class="panel-title">FOCUS</div>
+        <p>
+          Data • Machine Learning • AI Solutions
+        </p>
+        <p style="margin-top:12px;">
+          Growing a practical foundation in Python, SQL, databases, Excel, C++, and AI & Machine Learning.
+        </p>
+        <div class="taglist">
+          <span class="tag">Data Analysis</span>
+          <span class="tag">ML</span>
+          <span class="tag">AI</span>
+          <span class="tag">Solutions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="section" id="about">
+    <div class="kicker">ABOUT ME</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Turning Data Into Meaningful Solutions</h2>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="accent-line accent-blue"></div>
+        <div class="panel-title">ABOUT MOSTAFA</div>
+        <p>
+          I'm Mostafa Assad, a Computer Science student specializing in AI & Machine Learning,
+          passionate about turning data and complex problems into practical intelligent solutions.
+        </p>
+        <p style="margin-top:12px;">
+          With a growing foundation in Python, SQL, databases, Excel, and C++,
+          I'm developing my ability to build data-driven systems, explore machine learning,
+          and create solutions that turn information into meaningful results.
+        </p>
+      </div>
+
+      <div class="panel" style="background: linear-gradient(180deg, rgba(45,212,255,.06), rgba(255,255,255,.03));">
+        <div class="accent-line accent-blue" style="background: linear-gradient(90deg, rgba(45,212,255,1), rgba(74,163,255,1));"></div>
+        <div class="panel-title">MY APPROACH</div>
+        <p style="margin-bottom:12px;">I turn data and ideas into intelligent solutions that make complex problems simpler.</p>
+        <div class="taglist">
+          <span class="tag">Problem solving</span>
+          <span class="tag">Continuous learning</span>
+          <span class="tag">Data-driven thinking</span>
+          <span class="tag">Practical solutions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section class="section" id="education">
+    <div class="kicker">EDUCATION</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Building a Strong Foundation</h2>
+
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <div class="t-title">Benha National University (BNU) — B.Sc.</div>
+          <div class="t-sub">
+            2024–2028 • Computer Science—AI & Machine Learning<br/>
+            GPA: 3.5 / 4.0
+          </div>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <div class="t-title">DEPI — AI & Data Science (Course / training)</div>
+          <div class="t-sub">Training</div>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <div class="t-title">A to Z Academy — Programming (Course / training)</div>
+          <div class="t-sub">Training</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 5 -->
+  <section class="section" id="vision">
+    <div class="kicker">VISION</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Where I’m Heading</h2>
+
+    <div class="panel">
+      <div class="accent-line accent-purple"></div>
+      <div class="panel-title">MY VISION</div>
+      <p>
+        Build a strong, practical foundation in AI & Machine Learning.<br/>
+        Turn data and complex problems into useful, understandable solutions.<br/>
+        Keep learning through real projects, experimentation, and continuous improvement.<br/>
+        Replace this page with a more personal long-term vision whenever you want.
+      </p>
+    </div>
+  </section>
+
+  <!-- PAGE 6 -->
+  <section class="section" id="mission">
+    <div class="kicker">MISSION</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">What I Aim To Deliver</h2>
+
+    <div class="grid-3">
+      <div class="mini-card">
+        <div class="line"></div>
+        <h3>Learn</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Keep strengthening programming, data, and machine-learning fundamentals.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line cyan"></div>
+        <h3>Build</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Turn knowledge into real projects and practical solutions.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line purple"></div>
+        <h3>Solve</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Approach problems with structured, data-driven thinking.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 7 -->
+  <section class="section" id="services">
+    <div class="kicker">SERVICES</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">What I Offer</h2>
+
+    <div class="grid-2">
+      <div class="mini-card">
+        <div class="line"></div>
+        <h3>Data Analysis</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Clean, analyze, and interpret data to find useful insights.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line cyan"></div>
+        <h3>Machine Learning</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Build and explore ML solutions for prediction and classification.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line purple"></div>
+        <h3>AI Solutions</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Develop practical intelligent solutions for real problems.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line"></div>
+        <h3>Data Visualization</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Present information clearly so results are easier to understand.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line cyan"></div>
+        <h3>SQL & Databases</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Work with structured data and database-driven solutions.
+        </p>
+      </div>
+
+      <div class="mini-card">
+        <div class="line purple"></div>
+        <h3>AI Solutions</h3>
+        <p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px;">
+          Turning data into intelligent, actionable results.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 8 -->
+  <section class="section" id="projects">
+    <div class="kicker">LATEST PORTFOLIO</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Projects</h2>
+
+    <div class="project-list">
+      <div class="project">
+        <div class="proj-head"><h3>Number Quest</h3><button type="button" class="eye-btn" data-info="numberquest" aria-label="About Number Quest"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <a class="gh-box" href="https://github.com/Mostafa112-alt/number-quest"
+           target="_blank" rel="noopener noreferrer" aria-label="Number Quest on GitHub">
+          <svg viewBox="0 0 16 16" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="project alt">
+        <div class="proj-head"><h3>Minishell</h3><button type="button" class="eye-btn" data-info="minishell" aria-label="About Minishell"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <a class="gh-box" href="https://github.com/Mostafa112-alt/Minishell"
+           target="_blank" rel="noopener noreferrer" aria-label="Minishell on GitHub">
+          <svg viewBox="0 0 16 16" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="project purple">
+        <div class="proj-head"><h3>Restaurant System CLI</h3><button type="button" class="eye-btn" data-info="restaurant" aria-label="About Restaurant System CLI"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <a class="gh-box" href="https://github.com/Mostafa112-alt/Restaurant-System-Cli-"
+           target="_blank" rel="noopener noreferrer" aria-label="Restaurant System CLI on GitHub">
+          <svg viewBox="0 0 16 16" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 9 -->
+  <section class="section" id="skills">
+    <div class="kicker">SKILLS</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Tools & Technologies I Work With</h2>
+
+    <div class="skills-grid">
+      <div class="skill blue"><h3>Python</h3><p>Confirmed skill</p></div>
+      <div class="skill cyan"><h3>SQL</h3><p>Confirmed skill</p></div>
+      <div class="skill blue"><h3>Databases</h3><p>Confirmed skill</p></div>
+
+      <div class="skill cyan"><h3>Excel</h3><p>Confirmed skill</p></div>
+      <div class="skill blue"><h3>C++</h3><p>Confirmed skill</p></div>
+      <div class="skill purple"><h3>AI & Machine Learning</h3><p>Confirmed skill</p></div>
+    </div>
+  </section>
+
+  <!-- PAGE 10 -->
+  <section class="section" id="career">
+    <div class="kicker">CAREER FOCUS</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Open To Opportunities</h2>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="accent-line accent-blue"></div>
+        <div class="panel-title">FREELANCE PROJECTS</div>
+        <p>
+          Open to data, machine learning, AI, visualization, and SQL / database-related projects.
+        </p>
+        <p style="margin-top:12px;color:rgba(233,238,248,.55);">
+          Replace this text with your preferred freelance offer.
+        </p>
+      </div>
+
+      <div class="panel" style="background: linear-gradient(180deg, rgba(155,92,255,.07), rgba(255,255,255,.03));">
+        <div class="accent-line accent-purple"></div>
+        <div class="panel-title">INTERNSHIP OPPORTUNITIES</div>
+        <p>
+          Open to internship opportunities in AI & Machine Learning.
+        </p>
+        <p style="margin-top:12px;color:rgba(233,238,248,.55);">
+          Looking to grow through practical experience and real projects.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 11 -->
+  <section class="section" id="contact">
+    <div class="kicker">GET IN TOUCH</div>
+    <h2 style="font-size:clamp(28px,3.2vw,40px);">Let’s Build Something Intelligent.</h2>
+
+    <div class="contact-box">
+      <div class="panel-title" style="margin-top:8px;">CONTACT INFORMATION</div>
+
+      <div class="contact-grid">
+        <div class="kv">
+          <label>Email</label>
+          <span>masdmstfy78@gmail.com</span>
+        </div>
+        <div class="kv">
+          <label>Phone</label>
+          <span>01557856150</span>
+        </div>
+        <div class="kv" style="grid-column:1 / -1;">
+          <label>LinkedIn</label>
+          <span style="word-break:break-word;">
+            www.linkedin.com/in/mostafa-assad-mostafa-9258103a2
+          </span>
+        </div>
+      </div>
+
+      <div class="closing">Better Data / Smarter Models / Real Solutions.</div>
+
+      <p style="margin-top:10px;color:var(--muted);line-height:1.7;font-size:14px;">
+        Open to freelance projects and internship opportunities in AI & Machine Learning.
+      </p>
+    </div>
+  </section>
+
+  <!-- PAGE 12 -->
+  <section class="section" id="thankyou" style="min-height: auto;">
+    <div class="kicker">THANK YOU</div>
+    <h2 style="font-size:clamp(28px,3.2vw,44px);">For Your Attention</h2>
+
+    <div class="panel" style="padding:26px;background: linear-gradient(180deg, rgba(155,92,255,.08), rgba(255,255,255,.03));">
+      <div class="accent-line accent-purple"></div>
+      <div class="panel-title">THANK YOU</div>
+      <p>
+        Thank you for taking the time to explore my portfolio.<br/>
+        Mostafa Assad • AI & Machine Learning
+      </p>
+      <p style="margin-top:10px;color:rgba(233,238,248,.55);">
+        This page can be customized later with a personal closing message, QR code, or any additional link you want to add.
+      </p>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="projModal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="pmClose" aria-label="Close">&times;</button>
+    <h3 id="pmTitle"></h3>
+    <div id="pmBody"></div>
+    <div class="taglist" id="pmTags"></div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if(!el) return;
+      e.preventDefault();
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // Project info popup
+  const PROJECTS = {
+    numberquest: {
+      title: "Number Quest",
+      desc: "A command-line number-guessing game written in pure Python. Each round you win gets harder (a bigger range and fewer attempts), and losing sends you back to level 1.",
+      points: ["Progressive difficulty across levels", "Too high / too low hints after every guess", "Input validation: invalid guesses never cost an attempt", "Game logic separated from I/O, with pytest unit tests"],
+      tags: ["Python", "CLI", "pytest"]
+    },
+    minishell: {
+      title: "Minishell",
+      desc: "A small Unix-like command-line shell written in modern C++17. It runs built-in commands directly with POSIX system calls and launches everything else as external programs using fork + execvp.",
+      points: ["Built-ins: pwd, ls, cd, mkdir, cat, help, exit", "Runs any program found in PATH", "Command chaining with ;", "Ctrl+C interrupts the child process without killing the shell", "Black-box test suite via make test"],
+      tags: ["C++17", "POSIX", "Linux / macOS"]
+    },
+    restaurant: {
+      title: "Restaurant System CLI",
+      desc: "A dependency-free command-line restaurant ordering system in Python. Browse the menu, place orders with multiple items, and get an itemized receipt with VAT calculated automatically.",
+      points: ["Multi-item orders with repeated items merged", "Receipt with subtotal, 14% VAT, and total", "Add and remove menu items from the CLI", "Exact currency math using Decimal", "Input validation and pytest unit tests"],
+      tags: ["Python", "CLI", "pytest"]
+    }
+  };
+
+  const modal = document.getElementById('projModal');
+  const closeModal = () => modal.classList.remove('open');
+
+  document.querySelectorAll('.eye-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const d = PROJECTS[btn.dataset.info];
+      if(!d) return;
+      document.getElementById('pmTitle').textContent = d.title;
+      document.getElementById('pmBody').innerHTML =
+        '<p>' + d.desc + '</p><ul>' + d.points.map(x=>'<li>'+x+'</li>').join('') + '</ul>';
+      document.getElementById('pmTags').innerHTML =
+        d.tags.map(t=>'<span class="tag">'+t+'</span>').join('');
+      modal.classList.add('open');
+    });
+  });
+  document.getElementById('pmClose').addEventListener('click', closeModal);
+  modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>
